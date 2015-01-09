@@ -34,8 +34,8 @@ module FileReading
   # and undefined bytes will be stripped out.
   def convert_to_valid_utf8!(string, possible_encodings = [])
     original_encoding = string.encoding
-    string.force_encoding(Encoding::UTF_8) if original_encoding == Encoding::BINARY
-    return string if string.encoding == Encoding::UTF_8 && string.valid_encoding?
+    string.force_encoding(Encoding::UTF_8) unless original_encoding == Encoding::UTF_8
+    return string if string.valid_encoding?
 
     possible_encodings.each do |encoding|
       string.force_encoding(encoding)
