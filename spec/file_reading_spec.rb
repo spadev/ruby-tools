@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe FileReading do
   describe '.each_line_in_file' do
-    let(:line) { FileReading.each_line_in_file(path, options).to_a.first }
+    let(:line) { FileReading.each_line_in_file(path, options).first }
 
     describe 'with UTF-8 encoded file' do
       let(:path)    { test_file('utf8.txt') }
