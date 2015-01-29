@@ -168,7 +168,7 @@ class Stats
   def print(ending = '')
     message = [
       "#{seconds_to_time(elapsed_time)}",
-      "#{humanize_bytes(bytes_count)} [#{humanize_bytes(bytes_per_second.round(1))}/s]",
+      "#{humanize_bytes(bytes_count, 2)} [#{humanize_bytes(bytes_per_second.round(1))}/s]",
       "#{pretty_number(lines_count)} lines [#{pretty_number(lines_per_second.round)} lines/s]",
       "#{percentage_string}%",
     ].join(' | ')
