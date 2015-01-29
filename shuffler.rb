@@ -56,7 +56,7 @@ class Shuffler
       stats.increment(line.size)
     end
 
-    stats.print("\n")
+    stats.finish!
     io_object.close
     @output_files.each(&:close)
   end
@@ -126,7 +126,7 @@ module Formatting
   module_function :pretty_number
 
   def humanize_bytes(bytes, round = 1)
-    e = (Math.log(bytes) / Math.log(1024)).floor
+    e = bytes == 0 ? 0 : (Math.log(bytes) / Math.log(1024)).floor
     s = format("%.#{round}f", bytes.to_f / 1024**e)
 
     "#{s} #{SIZE_UNITS[e]}"
@@ -152,6 +152,17 @@ class Stats
 
   def start!
     @start_time = Time.now
+    @stats_thread = Thread.new do
+      loop do
+        print
+        sleep @update_interval
+      end
+    end
+  end
+
+  def finish!
+    @stats_thread.kill if @stats_thread
+    print("\n")
   end
 
   def print(ending = '')
@@ -162,7 +173,6 @@ class Stats
       "#{percentage_string}%",
     ].join(' | ')
     STDERR.print "#{ESCAPE_SEQUENCE}#{message}#{ending}"
-    @last_print_time = Time.now
   end
 
   def percentage_string
@@ -178,7 +188,6 @@ class Stats
   def increment(bytes)
     @lines_count += 1
     @bytes_count += bytes
-    print if !@last_print_time || Time.now - @last_print_time > @update_interval
   end
 
   def lines_per_second
