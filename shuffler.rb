@@ -100,15 +100,16 @@ end
 # Convenince methods for pretty formatting
 module Formatting
   SIZE_UNITS = %w(B KiB MiB GiB TiB)
+  WEEK       = 604_800
 
   def seconds_to_time(seconds)
     return '??:??:??' unless seconds.to_f.finite?
 
     seconds = seconds.to_i
-    return '> 2 weeks' if seconds > 2.weeks
+    return '> 2 weeks' if seconds > 2 * WEEK
 
     [seconds / 3600, seconds / 60 % 60, seconds % 60]
-    .map { |t| t.to_s.rjust(2, '0') }.join(':')
+      .map { |t| t.to_s.rjust(2, '0') }.join(':')
   end
   module_function :seconds_to_time
 
@@ -155,6 +156,7 @@ class Stats
 
   def print(ending = '')
     message = [
+      "#{seconds_to_time(elapsed_time)}",
       "#{humanize_bytes(bytes_count)} [#{humanize_bytes(bytes_per_second.round(1))}/s]",
       "#{pretty_number(lines_count)} lines [#{pretty_number(lines_per_second.round)} lines/s]",
       "#{percentage_string}%",
