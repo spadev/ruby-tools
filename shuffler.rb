@@ -134,7 +134,7 @@ module Formatting
   module_function :humanize_bytes
 end
 
-# Stats for shuffler, prints at most once per specified update interval
+# Stats for shuffler, prints once per specified update interval
 class Stats
   include Formatting
 
