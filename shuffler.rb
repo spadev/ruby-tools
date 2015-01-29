@@ -138,6 +138,8 @@ end
 class Stats
   include Formatting
 
+  SEP = ' | '
+
   attr_reader :lines_count,
               :bytes_count
 
@@ -166,19 +168,8 @@ class Stats
   end
 
   def print(ending = '')
-    message = [
-      "#{seconds_to_time(elapsed_time)}",
-      "#{humanize_bytes(bytes_count, 2)} [#{humanize_bytes(bytes_per_second.round(1))}/s]",
-      "#{pretty_number(lines_count)} lines [#{pretty_number(lines_per_second.round)} lines/s]",
-      "#{percentage_string}%",
-    ].join(' | ')
+    message = [time_string, bytes_string, lines_string, percentage_string].join(' | ')
     STDERR.print "#{ESCAPE_SEQUENCE}#{message}#{ending}"
-  end
-
-  def percentage_string
-    percentage(@io_object.pos, @io_object.size, 2).to_s
-  rescue NoMethodError, Errno::ESPIPE
-    '??'
   end
 
   def elapsed_time
@@ -196,6 +187,26 @@ class Stats
 
   def bytes_per_second
     bytes_count / elapsed_time
+  end
+
+  private
+
+  def time_string
+    seconds_to_time(elapsed_time)
+  end
+
+  def bytes_string
+    "#{humanize_bytes(bytes_count, 2)} [#{humanize_bytes(bytes_per_second.round(1))}/s]"
+  end
+
+  def lines_string
+    "#{pretty_number(lines_count)} lines [#{pretty_number(lines_per_second.round)} lines/s]"
+  end
+
+  def percentage_string
+    "#{percentage(@io_object.pos, @io_object.size, 2)}%"
+  rescue NoMethodError, Errno::ESPIPE
+    '??%'
   end
 end
 
