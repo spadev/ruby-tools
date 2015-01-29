@@ -34,7 +34,7 @@ class Shuffler
 
     puts "\n*** In-memory shuffle of #{output_paths.count} files"
     in_memory_shuffle_output_files
-    puts "\nTotal duration: #{(Time.now - start_time).round(2)} seconds"
+    puts "\nTotal duration: seconds#{Formatting.seconds_to_time(Time.now - start_time)}"
   end
 
   private
