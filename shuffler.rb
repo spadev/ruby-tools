@@ -14,7 +14,7 @@ ESCAPE_SEQUENCE = "\r\033[K"
 # Example
 #   input file with lines -> [1, 2, 3, 4, 5, 6, 7, 8]
 #   split into 2 chunks   -> [1, 4, 5, 8], [2, 3, 6, 7]
-#   shuffled in memor     -> [4, 1, 8, 5], [6, 3, 7, 2]
+#   shuffled in memory    -> [4, 1, 8, 5], [6, 3, 7, 2]
 class Shuffler
   DEFAULT_COUNT = 128
 
@@ -204,7 +204,7 @@ class Stats
   end
 
   def percentage_string
-    "#{percentage(@io_object.pos, @io_object.size, 2)}%"
+    "#{percentage(@io_object.pos, @io_object.size, 1)}%"
   rescue NoMethodError, Errno::ESPIPE
     '??%'
   end
